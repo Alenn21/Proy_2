@@ -1,58 +1,42 @@
 #!/usr/bin/env node
-//Diego Alejandro Vega Bohórquez
-/**
- * Module dependencies.
- */
+// Esta línea le dice al sistema operativo que este archivo debe ser ejecutado con Node.js
+//Diego Vega Bohórquez
 
-var app = require('../app');
-var debug = require('debug')('proy-2:server');
-var http = require('http');
+// Importación de módulos necesarios
+var app = require('../app'); // Importa el módulo 'app' 
+var debug = require('debug')('proy-2:server'); // Importa el módulo 'debug' para mensajes de depuración
+var http = require('http'); // Importa el módulo 'http' para crear el servidor HTTP
 
-/**
- * Get port from environment and store in Express.
- */
+// Obtiene el puerto del entorno y lo establece en Express
+var port = normalizePort(process.env.PORT || '3000'); // Obtiene el puerto del entorno o utiliza el puerto 3000 por defecto
+app.set('port', port); // Establece el puerto en la aplicación Express
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+// Crea un servidor HTTP
+var server = http.createServer(app); // Crea el servidor HTTP usando la aplicación Express
 
-/**
- * Create HTTP server.
- */
+// Escucha en el puerto proporcionado
+server.listen(port); // Hace que el servidor escuche en el puerto especificado
+server.on('error', onError); // Maneja errores de servidor
+server.on('listening', onListening); // Maneja el evento de escucha del servidor
 
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
+// Normaliza un puerto en un número, cadena o falso
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  var port = parseInt(val, 10); // Convierte el valor del puerto a un número entero
 
   if (isNaN(port)) {
-    // named pipe
+    // Si no es un número, devuelve el valor original 
     return val;
   }
 
   if (port >= 0) {
-    // port number
+    // Si es un número válido, devuelve el número del puerto
     return port;
   }
 
   return false;
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
-
+// Manejador de eventos para el error del servidor HTTP
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -62,7 +46,7 @@ function onError(error) {
     ? 'Pipe ' + port
     : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
+  // Maneja errores específicos de escucha
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
@@ -77,14 +61,12 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
+// Manejador de eventos para el evento de escucha del servidor HTTP
 function onListening() {
-  var addr = server.address();
+  var addr = server.address(); // Obtiene la dirección del servidor
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debug('Listening on ' + bind); // Muestra un mensaje de depuración con la dirección y el puerto en el que está escuchando el servidor
 }
+

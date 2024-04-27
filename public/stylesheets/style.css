@@ -1,8 +1,9 @@
 /* Diego Alejandro Vega Bohórquez */
+/* Estilo para los enlaces */
 a {
-  color: #00B7FF;
+  color: #00B7FF; /* Color del texto de los enlaces */
 }
 #main_map{
-  height : 500px;
-  border: 2px solid black;
+  height : 500px; /* Altura del elemento */
+  border: 2px solid black; /* Borde sólido de 2 píxeles de ancho en color negro */
 }
