@@ -1,13 +1,12 @@
 var map = L.map('main_map', {
     center: [4.6558194,-74.1408286],
-    zoom: 13
+    zoom: 16
 });
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
-
 
 var polygon = L.polygon([
     [4.579604, -74.158081],
@@ -16,17 +15,16 @@ var polygon = L.polygon([
 ]).addTo(map);
 polygon.bindPopup("Universidad Distrital");
 
-L.marker([4.6558194,-74.1408286]).addTo(map)//marcador, latitud y longitud
-    .bindPopup('Bicicleta 1 :>')//ventana emergente
-    .openPopup();
-    L.marker([4.579604, -74.158081]).addTo(map)//marcador, latitud y longitud
-    .bindPopup('Bicicleta 2 :>')//ventana emergente
-    .openPopup();
+    
 
-
-var circle = L.circle([4.6558194,-74.1408286], {
-    color: 'blue',
-    fillColor: 'blue',
-    fillOpacity: 0.5,
-    radius: 50
-}).addTo(map);
+$.ajax({//request asincronico http para hacer una solicitud a una web en formato JSON
+    dataType: 'json',
+    url: "/api/bicicletas",
+    success: function(result){
+        console.log(result);
+        result.bicicletas.forEach(function(bici){
+            L.marker(bici.ubicacion).addTo(map).bindPopup('Bici ID='+bici.id)//ventana emergente
+            .openPopup();
+        });
+    }
+})
