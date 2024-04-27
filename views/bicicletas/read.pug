@@ -1,33 +1,36 @@
+//- Diego Alejandro Vega Bohórquez 
+
 extends ../layout
 
 block content
-  a(href = '/bicicletas') Volver 
+  a(href='/bicicletas') Volver 
 
   br
   br
   br
 
-  h1  Consultando Datos Bicicleta 
+  h1 Consultando Datos Bicicleta 
 
   br
   br
 
-  form(action =`/bicicletas/${bici.id}/read` method ='post')
+  form(action=`/bicicletas/${bici.id}/read` method='post' style='width: 300px; margin: 0 auto;')
     label(for='id') ID: 
-    input#id(type='text' name ='id' value=bici.id readonly)
+    input#id(type='text' name='id' value=bici.id readonly style='width: 100%; margin-bottom: 10px;')
     br
     label(for='color') Color: 
-    input#color(type='text' name ='color' value=bici.color readonly)
+    input#color(type='text' name='color' value=bici.color readonly style='width: 100%; margin-bottom: 10px;')
     br
     label(for='modelo') Modelo: 
-    input#modelo(type='text' name ='modelo' value=bici.modelo readonly)
+    input#modelo(type='text' name='modelo' value=bici.modelo readonly style='width: 100%; margin-bottom: 10px;')
     br
     label(for='lat') Latitud: 
-    input#lat(type='text' name ='lat' value=bici.ubicacion[0] readonly)
+    input#lat(type='text' name='lat' value=bici.ubicacion[0] readonly style='width: 100%; margin-bottom: 10px;')
     br
     label(for='lng') Longitud: 
-    input#lng(type='text' name ='lng' value=bici.ubicacion[1] readonly)
+    input#lng(type='text' name='lng' value=bici.ubicacion[1] readonly style='width: 100%; margin-bottom: 10px;')
     br
     br
     input.btn(type='submit' value='Volver')
+
 

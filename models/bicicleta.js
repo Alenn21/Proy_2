@@ -1,3 +1,5 @@
+//Diego Alejandro Vega Bohórquez
+
 var Bicicleta = function (id,color, modelo, ubicacion){
     this.id=id;
     this.color = color;
@@ -35,7 +37,7 @@ Bicicleta.removeById = function (aBiciId){
 }
 //Se crean y se añaden 2 Bicicletas al vector allBicis
 var bicia = new Bicicleta (1, "Rojo con Negro", "BMX", [4.6558194,-74.1408286]);
-var bicib = new Bicicleta (2, "Azul con Blanco", "BMX", [4.6558195,-74.1408287]);
+var bicib = new Bicicleta (2, "Azul con Blanco", "BMX", [4.6658195,-74.1508287]);
 Bicicleta.add(bicia);
 Bicicleta.add(bicib);
 
