@@ -3,7 +3,7 @@
 extends ../layout
 
 block content
- a(href='/bicicletas/create') Nueva Bicicleta
+  a(href='/bicicletas/create') Nueva Bicicleta
 
   table.table
     thead
@@ -18,16 +18,16 @@ block content
     tbody
       each bici in bicis
         tr
-          td= bici.id
+          td= bici.code
           td= bici.color
           td= bici.modelo
           td= bici.ubicacion
           td 
-            a(href='bicicletas/'+bici.id+'/read') Consultar
+            a(href='bicicletas/'+bici.code+'/read') Consultar
           td 
-            a(href='bicicletas/'+bici.id+'/update') Editar
+            a(href='bicicletas/'+bici.code+'/update') Editar
           td
-            form.inline(method='post' action ='bicicletas/'+bici.id+'/delete')
-              input(type='hidden' name='id' value= bici.id)
+            form.inline(method='post' action ='bicicletas/'+bici.code+'/delete')
+              input(type='hidden' name='id' value= bici.code)
               button.link-button(type='submit' name='submit_param' value='submit_value' class='btn')
                 ='Eliminar'

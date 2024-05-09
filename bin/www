@@ -70,3 +70,4 @@ function onListening() {
   debug('Listening on ' + bind); // Muestra un mensaje de depuración con la dirección y el puerto en el que está escuchando el servidor
 }
 
+module.exports = server;

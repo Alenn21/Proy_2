@@ -14,9 +14,9 @@ block content
   br
   br
 
-  form(action=`/bicicletas/${bici.id}/update` method='post' style='width: 300px; margin: 0 auto;')
-    label(for='id') ID: 
-    input#id(type='text' name='id' value=bici.id style='width: calc(100% - 20px); margin-bottom: 10px; padding: 5px;')
+  form(action=`/bicicletas/${bici.code}/update` method='post' style='width: 300px; margin: 0 auto;')
+    label(for='id') Code: 
+    input#id(type='text' name='id' value=bici.code style='width: calc(100% - 20px); margin-bottom: 10px; padding: 5px;')
     br
     label(for='color') Color: 
     input#color(type='text' name='color' value=bici.color style='width: calc(100% - 20px); margin-bottom: 10px; padding: 5px;')
@@ -24,11 +24,11 @@ block content
     label(for='modelo') Modelo: 
     input#modelo(type='text' name='modelo' value=bici.modelo style='width: calc(100% - 20px); margin-bottom: 10px; padding: 5px;')
     br
-    label(for='lat') Latitud: 
-    input#lat(type='text' name='lat' value=bici.ubicacion[0] style='width: calc(100% - 20px); margin-bottom: 10px; padding: 5px;')
+    label(for='lat') Latitud:
+    input#lat(type='text' name='lat' value= bici.ubicacion ? bici.ubicacion[0] : '' style='width: calc(100% - 20px); margin-bottom: 10px; padding: 5px;')
     br
-    label(for='lng') Longitud: 
-    input#lng(type='text' name='lng' value=bici.ubicacion[1] style='width: calc(100% - 20px); margin-bottom: 10px; padding: 5px;')
+    label(for='lng') Longitud:
+    input#lng(type='text' name='lng' value= bici.ubicacion ? bici.ubicacion[1] : '' style='width: calc(100% - 20px); margin-bottom: 10px; padding: 5px;')
     br
     br
     input.btn(type='submit' value='OK')

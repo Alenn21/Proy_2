@@ -14,9 +14,9 @@ block content
   br
   br
 
-  form(action=`/bicicletas/${bici.id}/read` method='post' style='width: 300px; margin: 0 auto;')
-    label(for='id') ID: 
-    input#id(type='text' name='id' value=bici.id readonly style='width: 100%; margin-bottom: 10px;')
+  form(action=`/bicicletas/${bici.code}/read` method='post' style='width: 300px; margin: 0 auto;')
+    label(for='id') Code: 
+    input#id(type='text' name='id' value=bici.code readonly style='width: 100%; margin-bottom: 10px;')
     br
     label(for='color') Color: 
     input#color(type='text' name='color' value=bici.color readonly style='width: 100%; margin-bottom: 10px;')
@@ -24,11 +24,13 @@ block content
     label(for='modelo') Modelo: 
     input#modelo(type='text' name='modelo' value=bici.modelo readonly style='width: 100%; margin-bottom: 10px;')
     br
-    label(for='lat') Latitud: 
-    input#lat(type='text' name='lat' value=bici.ubicacion[0] readonly style='width: 100%; margin-bottom: 10px;')
+    label(for='lat') Latitud:
+    input#lat(type='text' name='lat' value= bici.ubicacion ? bici.ubicacion[0] : '' readonly style='width: 100%; margin-bottom: 10px;')
+    //- value= bici.ubicacion ? bici.ubicacion[0] : '' significa: "Si bici.ubicacion existe y no es null ni undefined, 
+    //-establece el valor del input como bici.ubicacion[0]; de lo contrario, establece el valor del input como una cadena vacía"
     br
-    label(for='lng') Longitud: 
-    input#lng(type='text' name='lng' value=bici.ubicacion[1] readonly style='width: 100%; margin-bottom: 10px;')
+    label(for='lng') Longitud:
+    input#lng(type='text' name='lng' value= bici.ubicacion ? bici.ubicacion[1] : '' readonly style='width: 100%; margin-bottom: 10px;')
     br
     br
     input.btn(type='submit' value='Volver')

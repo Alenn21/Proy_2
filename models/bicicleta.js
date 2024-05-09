@@ -1,46 +1,96 @@
 //Diego Alejandro Vega Bohórquez
+// Requerir la librería mongoose para la interacción con la base de datos MongoDB
+var mongoose = require('mongoose');
 
-//Constructor para la creación de una Bicicleta
-var Bicicleta = function (id,color, modelo, ubicacion){
-    this.id=id; //Se asigna el valor id al atributo id
-    this.color = color;// se le asigna el valor de color al atributo color
-    this.modelo = modelo;//se le asigna el valor de modelo al atributo modelo
-    this.ubicacion = ubicacion;//se le asigna el valor de ubicacion al atributo ubicacion
-}
-//Método .toString para mostrar la información de una bicicleta
-Bicicleta.prototype.toString = function (){
-    return "id: "+this.id+" | color: "+this.color+" | modelo: "+this.modelo+" | ubicación: "+this.ubicacion;
+// Crear un nuevo esquema para el modelo de Bicicleta
+var Schema = mongoose.Schema;
+
+// Definir el esquema de Bicicleta con los campos "code", "color", "modelo" y "ubicacion"
+var bicicletaSchema = new Schema({
+    code: Number,
+    color: String,
+    modelo: String,
+    ubicacion: {
+        type: [Number], index: { type: '2dsphere', sparse: true }
+    }
+});
+
+// Método estático para crear una nueva instancia de Bicicleta con los datos proporcionados
+bicicletaSchema.statics.createInstance = function(code, color, modelo, ubicacion){
+    return new this({
+        code: code,
+        color: color,
+        modelo: modelo, 
+        ubicacion: ubicacion
+    });
 }
 
-//Vector de Datos que guarda objetos Bicicleta
-Bicicleta.allBicis = [];
-//Función para añadir un objeto Bicicleta al vector de datos allBicis
-Bicicleta.add = function(aBici){
-    Bicicleta.allBicis.push(aBici);//Se agrega aBici a allBicis
+// Método para convertir la información de una bicicleta en una cadena de texto
+bicicletaSchema.methods.toString = function(){
+    return 'code: ' + this.code + ' | color: ' + this.color;
 }
-//Función para la consulta de una bicicleta por su ID
-Bicicleta.findById = function (aBiciId){
-    var aBici = Bicicleta.allBicis.find(x => x.id == aBiciId); //Se busca la bici con el id aBiciId en el vector allBicis y se le asigna el valor al objeto aBici
-    if(aBici){
-        return aBici; //Si se encuentra devuelve la bicicleta aBici
-    }else{
-        throw new Error(`No existe una Bicicleta con el ID: ${aBiciId}`); //Si no encuentra la bicicleta en el vector allBicis lanza un Error
+
+// Método estático para obtener todas las bicicletas almacenadas en la base de datos
+bicicletaSchema.statics.allBicis = async function() {
+    try {
+        console.log("Entrando a la función allBicis"); // Mensaje de depuración para verificar si la función se está llamando
+        
+        // Consultar todas las bicicletas en la base de datos
+        const bicicletas = await this.find({}).exec();
+        console.log("Bicicletas encontradas:", bicicletas); // Mensaje de depuración para ver las bicicletas encontradas
+        
+        return bicicletas;
+    } catch (error) {
+        console.error('Error al obtener todas las bicicletas:', error); // Mostrar errores en la consola si ocurren
+        throw new Error('Error al obtener todas las bicicletas: ' + error.message);
     }
+};
+
+// Método estático para agregar una nueva bicicleta a la base de datos
+bicicletaSchema.statics.add = function (aBici) {
+    console.log("entre a la funcion de crear");
+    return this.create(aBici); // Utilizar el método create() de Mongoose para crear una nueva bicicleta
 }
-//Función para Eliminar una bicicleta del Vector de Datos allBicis por medio de su ID
-Bicicleta.removeById = function (aBiciId){
-    for(var i = 0; i < Bicicleta.allBicis.length; i++){//Se crea un bucle para encontarr una bicicleta que este en la lista allBicis que tenga el id aBiciId
-        if(Bicicleta.allBicis[i].id == aBiciId){ 
-            Bicicleta.allBicis.splice(i, 1);//Si la encuentra la elimina del vector allBicis y rompe el bucle
-            break;
-        }
-    }
+
+// Método estático para encontrar una bicicleta por su código
+bicicletaSchema.statics.findByCode = function(aCode) {
+    console.log("entre a la funcion de consulta");
+    return this.findOne({ code: aCode }).exec(); // Utilizar findOne() para encontrar una bicicleta por su código
 }
-//Creación y adición de 2 Bicicletas al vector allBicis
-var bicia = new Bicicleta (1, "Rojo con Negro", "BMX", [4.6558194,-74.1408286]);
-var bicib = new Bicicleta (2, "Azul con Blanco", "BMX", [4.6658195,-74.1508287]);
-//Se hace uso del método .add apra añadir las dos Bicicletas anteriormente creadas al vector de datos allBicis
-Bicicleta.add(bicia);
-Bicicleta.add(bicib);
-//Se realiza la exportación del Objeto Bicicleta
+
+// Método estático para eliminar una bicicleta por su código
+bicicletaSchema.statics.removeByCode = function(aCode) {
+    console.log("Entre a la eliminación de una Bici");
+    return this.deleteOne({ code: aCode }).exec(); // Utilizar deleteOne() para eliminar una bicicleta por su código
+}
+
+// Crear el modelo de Bicicleta utilizando el esquema definido anteriormente
+var Bicicleta = mongoose.model('Bicicleta', bicicletaSchema);
+
+
+/*
+// Crear una instancia de bicicleta utilizando el método createInstance
+var nuevaBicicleta = Bicicleta.createInstance(1, "Rojo", "BMX", [4.6558194, -74.1408286]);
+console.log("hola"+nuevaBicicleta.toString());
+Bicicleta.add(nuevaBicicleta);
+Bicicleta.allBicis(function(err, bicicletas) {
+    console.log(bicicletas);
+});
+//Encontrar Bici
+    Bicicleta.findByCode(1)
+    .then(function(bici) {
+        console.log("Bicicleta encontrada:", bici);
+    })
+    .catch(function(error) {
+        console.error("Error al buscar la bicicleta por código:", error);
+    });
+    //Eliminar Bici
+    Bicicleta.removeByCode(1)
+    .then(function() {
+        console.log("Bicicleta eliminada exitosamente");
+    })
+    .catch(function(error) {
+        console.error("Error al eliminar bicicleta:", error);
+    });
+*/
 module.exports = Bicicleta;

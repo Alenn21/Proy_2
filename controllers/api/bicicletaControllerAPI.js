@@ -3,36 +3,51 @@
 var Bicicleta = require('../../models/bicicleta');
 
 // Controlador para obtener la lista de bicicletas por medio de la API
-exports.bicicleta_list = function(req, res) { //Devuelve un estado 200 y manda la lista de Bicicletas en formato JSON
-    res.status(200).json({
-        bicicletas: Bicicleta.allBicis
-    });
+exports.bicicleta_list = async function(req, res) {
+    try {
+        const bicicletas = await Bicicleta.allBicis(); // Llama a la función estática allBicis del modelo Bicicleta
+        res.status(200).json({ bicicletas }); // Devuelve la lista de bicicletas en formato JSON
+    } catch (error) {
+        console.error('Error al obtener la lista de bicicletas:', error);
+        res.status(500).json({ error: 'Error al obtener la lista de bicicletas' });
+    }
 }
 
 // Controlador para crear una bicicleta nueva por medio de la API
-exports.bicicleta_create = function(req, res) {
-    var bici = new Bicicleta(req.body.id, req.body.color, req.body.modelo); //Se realiza la creación de un Objeto Bicicleta "bici" y se le añaden sus atributos por medio del objeto Request
-    bici.ubicacion = [req.body.lat, req.body.lng];
-    Bicicleta.add(bici); //Se añade la Bicicleta a la lista allBicis
-    res.status(200).json({ 
-        bicicleta: bici
-    }); //Se devuelve un stado 200 y se manda en formato JSON al objeto bici
+exports.bicicleta_create = async function(req, res) {
+    try {
+        var bici = Bicicleta.createInstance(req.body.id, req.body.color, req.body.modelo, [req.body.lat, req.body.lng]); // Crea una nueva instancia de Bicicleta
+        await Bicicleta.add(bici); // Llama a la función estática add del modelo Bicicleta para añadir la bicicleta
+        res.status(200).json({ bicicleta: bici }); // Devuelve la bicicleta creada en formato JSON
+    } catch (error) {
+        console.error('Error al crear la bicicleta:', error);
+        res.status(500).json({ error: 'Error al crear la bicicleta' });
+    }
 }
 
 // Controlador para actualizar una bicicleta existente por medio de la API
-exports.bicicleta_put = function(req, res) {
-    var bici = Bicicleta.findById(req.body.id); //Se realiza la creación de un Objeto Bicicleta asignandole el Valor del Objeto Bicicleta que fue consultado por medio de su ID
-    bici.id = req.body.id; //Se recibe y se asigna al objeto el nuevo ID recibido por medio del objeto Request
-    bici.color = req.body.color; //Se recibe y se asigna al objeto el nuevo color recibido por medio del objeto Request
-    bici.modelo = req.body.modelo; //Se recibe y se asigna al objeto el nuevo modelo recibido por medio del objeto Request
-    bici.ubicacion = [req.body.lat, req.body.lng]; //Se recibe y se asigna al objeto la nueva ubicación recibido por medio del objeto Request
-    res.status(200).json({ 
-        bicicleta: bici
-    }); //Se retorna un estado 200 y se manda el objeto bici como JSON
+exports.bicicleta_put = async function(req, res) {
+    try {
+        var bici = await Bicicleta.findByCode(req.body.id); // Busca la bicicleta por su código
+        bici.code = req.body.id; // Actualiza los datos de la bicicleta
+        bici.color = req.body.color;
+        bici.modelo = req.body.modelo;
+        bici.ubicacion = [req.body.lat, req.body.lng];
+        await bici.save(); // Guarda los cambios en la base de datos
+        res.status(200).json({ bicicleta: bici }); // Devuelve la bicicleta actualizada en formato JSON
+    } catch (error) {
+        console.error('Error al actualizar la bicicleta:', error);
+        res.status(500).json({ error: 'Error al actualizar la bicicleta' });
+    }
 }
 
 // Controlador para eliminar una bicicleta por medio de la API
-exports.bicicleta_delete = function(req, res) {
-    Bicicleta.removeById(req.body.id); //Se hace uso del método removeById para realizar la eliminación de la Bicicleta del vector de datos, cuyo ID es recibido por el objeto Request
-    res.status(204).send(); // Se devuelve estado 204 Not Found
+exports.bicicleta_delete = async function(req, res) {
+    try {
+        await Bicicleta.removeByCode(req.body.id); // Llama a la función estática removeByCode del modelo Bicicleta para eliminar la bicicleta por su código
+        res.status(204).send(); // Devuelve el código de estado 204 (No Content) indicando que se eliminó la bicicleta
+    } catch (error) {
+        console.error('Error al eliminar la bicicleta:', error);
+        res.status(500).json({ error: 'Error al eliminar la bicicleta' });
+    }
 }
