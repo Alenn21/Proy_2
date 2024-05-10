@@ -26,7 +26,7 @@ $.ajax({//request asincronico http para hacer una solicitud a una web en formato
     success: function(result){ //función que evalua el exito que tuvo la solicitud AJAX, en donde result es un parametro que contiene los datos devueltos por la API en formato JSON
         console.log(result);
         result.bicicletas.forEach(function(bici){ //Para cada bicicleta mandada de la API de bicicletas crea un marcador en el mapa
-            L.marker(bici.ubicacion).addTo(map).bindPopup('Bici ID='+bici.id)//ventana emergente
+            L.marker(bici.ubicacion).addTo(map).bindPopup('Bici ID='+bici.code)//ventana emergente
             .openPopup();
         });
     }

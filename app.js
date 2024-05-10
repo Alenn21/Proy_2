@@ -24,7 +24,7 @@ var app = express();
 
 
 var mongoDB = 'mongodb://127.0.0.1/red_bicicletas';
-mongoose.connect(mongoDB).then(db => console.log("Esta conectada la bd"))
+mongoose.connect(mongoDB).then(db => console.log("Esta conectada la bd")) //FUNCION DE FLECHA
 .catch(err => console.log(err));//{useNewUrlParser: true}
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
